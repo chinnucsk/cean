@@ -1,0 +1,76 @@
+This is the CEAN framework.
+
+Here is minimal instructions to setup a working directory.
+
+1) make sure you have git 1.7 and zsh 4.3 installed   (tested on osx and debian)
+   note: cvsps and git-cvs needed only if you intend to import code from cvs
+
+  osx:
+      * Install homebrew: http://mxcl.github.com/homebrew/
+      * brew install git tig cvsps openssl
+  debian:
+      * apt-get install git-core git-cvs git-svn git-doc cvsps tig zsh
+  archlinux:
+      * pacman -S git tig zsh cvsps
+
+ if you need to build ejabberd, latex and hevea must be installed too.
+
+2) get the cean framework
+
+ there are 3 profile: mini (default), base, full. when bootstraping your working
+ directory, you choose which profile you want. mini only contains compiler kernel
+ stdlib and few libs. base contains most usefull libs (console). full contains all
+ otp libs.
+
+cd $HOME
+git clone git://git.process-one.net/cean/cean.git .cean  ($HOME/.cean is mandatory)
+$HOME/.cean/bin/cean force create R14 R14B03 base
+alias cean='$HOME/.cean/bin/cean shell'
+cean R14
+
+ note: you can check generated archives into
+ $HOME/.cache/cean/sources
+ $HOME/.cache/cean/bootstraps
+
+3) let's build yaws package
+R14B03> cean/install yaws
+R14B03> ls src/yaws
+R14B03> ls pub/src/yaws
+R14B03> ls pub/bin/linux-x86_64/R14/yaws
+R14B03> tar tf pub/bin/linux-x86_64/R14/yaws/yaws-1.91.epkg
+
+4) let's check what are available commands, get help for one of them and try
+R14B03> help
+R14B03> help package/depends
+R14B03> package/depends yaws
+
+4) exit the cean shell (ctrl+d)
+
+5) create a new full OTP working environement
+$HOME/.cean/bin/cean force create $HOME/anotherR14 R14B03 full
+cean $HOME/anotherR14
+
+--- deeper package handling, example for ejabberd
+
+fetch or update sources: package/fetch ejabberd
+build sources: package/build ejabberd
+generate epkg for packaging: package/install ejabberd
+all that in one shot: package ejabberd
+all that in one shot for a tagged version: package ejabberd v2.1.5
+
+install generated epkg in your local erlang installation: cean/install ejabberd
+check it's installed this way:
+cdr   (this change current directory to workdir root)
+ls lib
+
+list available packages: package/list
+search for server packages: package/search server
+
+--- you don't like the prompt ?
+
+look at ~/.cean/themes
+send me any contribution for inclusion
+
+--- found an issue ?
+
+christophe.romain@process-one.net
