@@ -23,7 +23,7 @@ tools|typer|xmerl)*
 archive=$destdir/${vsn}_${arch}_full.tar.gz
 [ -f $archive ] || tar zcf $archive bin usr \
 lib/(cean|appmon|asn1|common_test|compiler|cosEvent|cosEventDomain|cosFileTransfer|\
-cosNotification|cosProperty|cosTime|cosTransactions|crypto|debugger|dialyzer|\
+cosNotification|cosProperty|cosTime|cosTransactions|crypto|debugger|dialyzer|diameter|\
 docbuilder|edoc|erl_docgen|erl_interface|erts|et|eunit|gs|hipe|ic|inets|inviso|\
 kernel|megaco|mnesia|observer|orber|os_mon|otp_mibs|parsetools|percept|pman|\
 public_key|reltool|runtime_tools|sasl|snmp|ssh|ssl|stdlib|syntax_tools|\
