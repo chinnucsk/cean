@@ -7,7 +7,7 @@
 _api_check "cross/otp arch" $* || return $bad_use
 local arch=$1 subpkg
 
-cean/import bootstrap $arch
+cean/import bootstraps $arch
 _cd_workdir
 tar zxf ~/.cache/cean/bootstraps/${ERLANG_VERSION}_${arch}_full.tar.gz
 (cd lib
