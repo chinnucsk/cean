@@ -81,7 +81,7 @@ bootstrap)
     (cd ~/.cache/cean/bootstraps
      for archive in mini base full
      do
-         archive=${ERLANG_VERSION}_${1:-CEAN_HOSTARCH}_${archive}.tar.gz
+         archive=${ERLANG_VERSION}_${1:-$CEAN_HOSTARCH}_${archive}.tar.gz
          [ -f $archive ] || curl $CEAN_SERVER/pub/bootstraps/$archive > $archive
      done)
     ;;
