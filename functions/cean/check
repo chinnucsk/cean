@@ -33,7 +33,7 @@ do
     nbbeam=$((`unzip -l *.ez 2>/dev/null | grep "\.beam" | wc -l`))
     _rm_workdir
     [ $nbsrc -eq 0 ] && rm $package
-    [ $nbbeam -eq 0 ] && rm $package
+    [ $nbbeam -eq 0 ] && _warn ${package/$CEAN_ROOT/} compilation failed but keeping package
     [ $nbsrc -gt $nbbeam ] && _warn ${package/$CEAN_ROOT/} partial compilation but keeping package
 done
 
