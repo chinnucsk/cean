@@ -6,6 +6,8 @@ cean
  manipulate cean working directories, and i/o on /pub repository
 cross
  handle cross compilation
+devel
+ work with local changes of packages
 export
  export packages builds into /pub (sources, tarball, packages, installers...)
 import

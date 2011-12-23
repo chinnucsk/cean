@@ -17,6 +17,12 @@ _pkg_cd_sources && {
     mkdir -p $archive:h
     git archive --prefix=$archive:t:r/ HEAD | gzip -9 >$archive
     cd $CEAN_ROOT
+    # clean tarball
+    _cd_workdir
+    tar zxf $archive
+    rm */.gitignore
+    tar zcf $archive *
+    _rm_workdir
 } || {
     _error "($pkg_name) no sources repository"
     return $missing_sources

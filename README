@@ -7,13 +7,15 @@ Here is minimal instructions to setup a working directory.
 
   osx:
       * Install homebrew: http://mxcl.github.com/homebrew/
-      * brew install git tig cvsps openssl
+      * brew install git tig cvsps
   debian:
       * apt-get install git-core git-cvs git-svn git-doc cvsps tig zsh
   archlinux:
       * pacman -S git tig zsh cvsps
+  netbsd:
+      * pkgin in scmgit tig zsh-4.3.10nb2
 
- if you need to build ejabberd, latex and hevea must be installed too.
+ if you need to build ejabberd, openssl latex and hevea must be installed as well.
 
 2) get the cean framework
 
@@ -24,7 +26,11 @@ Here is minimal instructions to setup a working directory.
 
 cd $HOME
 git clone git://git.process-one.net/cean/cean.git .cean  ($HOME/.cean is mandatory)
+$HOME/.cean/bin/cean create R14 R14B03 base
+if it complains about missing dependencies you will not use, just force install
 $HOME/.cean/bin/cean force create R14 R14B03 base
+
+setup your environment, and launch CEAN shell
 alias cean='$HOME/.cean/bin/cean shell'
 cean R14
 
@@ -33,7 +39,7 @@ cean R14
  $HOME/.cache/cean/bootstraps
 
 3) let's build yaws package and install it in workdir
-R14B03> cean/install yaws
+R14B03> package yaws
 R14B03> ls src/yaws
 R14B03> ls pub/src/yaws
 R14B03> ls pub/bin/linux-x86_64/R14/yaws
@@ -43,8 +49,6 @@ R14B03:yaws:master(yaws-1.91-...)> :>dirty
 R14B03:yaws:master(yaws-1.91-...)> git status
 R14B03:yaws:master(yaws-1.91-...)> rm dirty
 R14B03:yaws:master(yaws-1.91-...)> cdr
-R14B03> package/build yaws
-R14B03> ls tmp   (list working build sandbox tarballs)
 R14B03> cean/install yaws
 R14B03> ls lib/yaws-1.91
 R14B03> erl
@@ -72,6 +76,7 @@ build sources: package/build ejabberd
 generate epkg for packaging: package/install ejabberd
 all that in one shot: package ejabberd
 all that in one shot for a tagged version: package ejabberd v2.1.5
+checkout the master branch of ejabberd: package/fetch ejabberd master
 
 install generated epkg in your local erlang installation: cean/install ejabberd
 check it's installed this way:

@@ -1,0 +1,42 @@
+# Description: Check local packages repository and fix issues
+# Author: Christophe Romain <cromain@process-one.net>
+# Depends: 
+# Usage: cean/check
+# vim: set foldmarker=#(,#) foldmethod=marker ts=4 sw=4 sts=4 et syntax=zsh:
+
+_api_check "cean/check" $* || return $bad_use
+local arch package generic real
+
+# Make sur generic packages are made available for all platforms
+cd $CEAN_ROOT/pub/bin
+for package in $(/bin/ls -d generic/*/*)
+do
+    for arch in $(/bin/ls -1 | grep -v generic)
+    do
+        for generic in $package/*
+        do
+            real=${package/generic/$arch}
+            [ -d $real ] || mkdir -p $real
+            (cd $real
+             [ -e $generic:t ] || ln -s ../../../$generic)
+        done
+    done
+done
+cd $CEAN_ROOT
+
+# Remove all packages known to be broken
+for package in $(find $CEAN_ROOT/pub/bin -type f -name "*epkg")
+do
+    _cd_workdir
+    tar xf $package
+    nbsrc=$((`unzip -l *.src.zip 2>/dev/null | grep "\.erl" | wc -l`))
+    nbbeam=$((`unzip -l *.ez 2>/dev/null | grep "\.beam" | wc -l`))
+    _rm_workdir
+    [ $nbsrc -eq 0 ] && rm $package
+    [ $nbbeam -eq 0 ] && rm $package
+    [ $nbsrc -gt $nbbeam ] && _warn ${package/$CEAN_ROOT/} partial compilation but keeping package
+done
+
+# TODO Clean .pub entries
+
+_info "done"

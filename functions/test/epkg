@@ -13,7 +13,9 @@ tar xf $epkg
 nbsrc=$((`unzip -l $dist.src.zip 2>/dev/null | grep "\.erl" | wc -l`))
 nbbeam=$((`unzip -l $dist.ez 2>/dev/null | grep "\.beam" | wc -l`))
 nblib=$((`unzip -l $dist.priv.zip 2>/dev/null | grep "\.so" | wc -l`))
-[ $nbsrc -eq 0 ] && _error $epkg have no sources
-[ $nbbeam -eq 0 ] && _error $epkg compilation failed
-[ $nbsrc -gt $nbbeam ] && _warn $epkg partial compilation
 _rm_workdir
+
+[ $nbsrc -eq 0 ] && { _error $epkg have no sources; return $package_error }
+[ $nbbeam -eq 0 ] && { _error $epkg compilation failed; return $package_error }
+[ $nbsrc -gt $nbbeam ] && { _warn $epkg partial compilation; return $package_error }
+return $success
