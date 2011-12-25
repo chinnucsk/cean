@@ -61,12 +61,13 @@ debian)
     # usage: cean/import debian linux-x86 erlang-base_14.a-dfsg-2
     local arch=$1 deb=$2 lib=${${2%%-*}%%-*}
     local mirror="http://ftp.ch.debian.org/debian"
-    local url=$mirror/pool/main/$lib[1]/$lib/${deb}_${arch}.deb
+    local url=$mirror/pool/main/$lib[1]/$lib/${deb}_${arch/linux-/}.deb
     local vsn=${${deb##*_}%-dfsg*}
     local dir
     [[ $lib == "erlang" ]] && {
-        local -a debvsn=(${(s|.|)vsn})
-        vsn="R$debvsn[1]$debvsn[2]:u$debvsn[3]"
+        local -a debvsn
+        debvsn=(${(s|.|)vsn})
+        vsn="R$debvsn[1]$debvsn[2]:u${(l:2::0:)debvsn[3]}"
     }
     _cd_workdir
     curl $url > ${deb}_${arch}.deb
