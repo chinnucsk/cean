@@ -9,9 +9,8 @@ local action=$1; shift
 local srvsh=cean@${CEAN_SERVER#http://}
 
 bootstrap() {
-    local otp=$1 arch=$2 dir=$3
-    (cd $dir
-     rm -Rf lib/*/{examples,src,c_src}
+    local otp=$1 arch=$2
+    (rm -Rf lib/*/{examples,src,c_src}
      export/bootstrap $otp $arch)
 }
 epkg() {
@@ -52,31 +51,49 @@ archive)
     esac
     [[ $lib == "erlang" ]] || cd -
     for dir in lib/*; epkg $otp $arch $dir
-    bootstrap $otp $arch .
+    bootstrap $otp $arch
     _rm_workdir
     [[ $lib == "erlang" ]] && lib=otp
     package/install $lib $arch ;;
 debian)
     # imports binary archive from debian packages
-    # usage: cean/import debian linux-x86 erlang-base_14.a-dfsg-2
-    local arch=$1 deb=$2 lib=${${2%%-*}%%-*}
-    local mirror="http://ftp.ch.debian.org/debian"
-    local url=$mirror/pool/main/$lib[1]/$lib/${deb}_${arch/linux-/}.deb
-    local vsn=${${deb##*_}%-dfsg*}
-    local dir
-    [[ $lib == "erlang" ]] && {
-        local -a debvsn
-        debvsn=(${(s|.|)vsn})
-        vsn="R$debvsn[1]$debvsn[2]:u${(l:2::0:)debvsn[3]}"
-    }
+    # usage: cean/import debian amd64 erlang 14.b.4-dfsg-1
+    local arch=$1 lib=$2 vsn=$3 otp
+    local dir deb url="http://ftp.ch.debian.org/debian/pool/main/$lib[1]/$lib"
     _cd_workdir
-    curl $url > ${deb}_${arch}.deb
-    dpkg-deb -x ${deb}_${arch}.deb .
+    [[ $lib == "erlang" ]] && {
+        local -a otpvsn
+        otp=${vsn%-*}
+        otpvsn=(${(s|.|)otp})
+        otp="R$otpvsn[1]$otpvsn[2]:u${(l:2::0:)otpvsn[3]}"
+        deb=erlang-base-hipe_${vsn}_${arch}.deb
+        curl -f $url/$deb > $deb || {
+            deb=erlang-base_${vsn}_${arch}.deb
+            curl -f $url/$deb > $deb || return $import_error
+        }
+        dpkg-deb -x $deb .
+        for lib in appmon asn1 common-test corba crypto debugger dev dialyzer diameter docbuilder edoc erl-docgen et \
+                   eunit gs ic inets inviso megaco mnesia observer odbc os-mon parsetools percept pman public-key \
+                   reltool runtime-tools snmp ssh ssl syntax-tools test-server toolbar tools tv typer webtool wx xmerl \
+                   examples ic-java jinterface mode src doc
+        do
+            deb=erlang-${lib}_${vsn}_${arch}.deb
+            curl -f $url/$deb > $deb
+            dpkg-deb -x $deb .
+        done
+        lib=otp
+    } || {
+        otp=$ERLANG_VERSION  # assume user don't do ugly imports
+        deb=${lib}_${vsn}_${arch}.deb
+        curl -f $url/$deb > $deb || return $import_error
+        dpkg-deb -x $deb .
+    }
     [[ $arch == "i386" ]] && arch="x86"
-    for dir in url/lib/erlang/lib/*; epkg $otp $arch $dir
-    bootstrap $otp $arch url/lib/erlang
+    [[ $arch == "amd64" ]] && arch="x86_64"
+    arch=linux-$arch
+    for dir in usr/lib/erlang/lib/*; epkg $otp $arch $dir
+    [[ $lib == "otp" ]] && (cd usr/lib/erlang; bootstrap $otp $arch)
     _rm_workdir
-    [[ $lib == "erlang" ]] && lib=otp
     package/install $lib $arch ;;
 bootstraps)
     (cd ~/.cache/cean/bootstraps
