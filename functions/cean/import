@@ -10,8 +10,29 @@ local srvsh=cean@${CEAN_SERVER#http://}
 
 bootstrap() {
     local otp=$1 arch=$2
-    (rm -Rf lib/*/{examples,src,c_src}
-     export/bootstrap $otp $arch)
+    mkdir src tmp
+    rm bin/*(D@)
+    cp erts-*/bin/* bin && rm -Rf erts-*
+    cp -r $CEAN_ROOT/lib/cean-* lib
+    (cd lib
+     ln -s kernel-* kernel
+     ln -s stdlib-* stdlib)
+cat > bin/erl << END
+#!/bin/sh
+ROOTDIR=\`dirname \$0\`
+ROOTDIR=\`cd \$ROOTDIR/..; pwd\`
+BINDIR=\$ROOTDIR/bin
+EMU=beam
+PROGNAME=\`echo \$0 | sed 's/.*\///'\`
+export EMU
+export ROOTDIR
+export BINDIR
+export PROGNAME
+exec \$BINDIR/erlexec \${1+"\$@"}
+END
+    rm -Rf lib/*/{examples,src,c_src}
+    echo 'beam_lib:strip_files(filelib:wildcard("lib/*/ebin/*beam")), init:stop().' | erl >/dev/null
+    export/bootstrap $otp $arch
 }
 epkg() {
     local otp=$1 arch=$2 dir=$3
@@ -59,7 +80,12 @@ debian)
     # imports binary archive from debian packages
     # usage: cean/import debian amd64 erlang 14.b.4-dfsg-1
     local arch=$1 lib=$2 vsn=$3 otp
-    local dir deb url="http://ftp.ch.debian.org/debian/pool/main/$lib[1]/$lib"
+    local dir deb url="http://ftp.ch.debian.org"
+    case $arch in
+    avr32|sh4|sparc64) url+="/debian-ports" ;;
+    *) url+="/debian" ;;
+    esac
+    url+="/pool/main/$lib[1]/$lib"
     _cd_workdir
     [[ $lib == "erlang" ]] && {
         local -a otpvsn
