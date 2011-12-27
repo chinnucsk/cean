@@ -20,24 +20,40 @@ local buildtar=$CEAN_ROOT/tmp/$dist.tgz
     local el
     tar zxf $buildtar
     # Strip beam and binaries, and define if generic or not
-    (cd $dist; for el in bin lib; [ -d $el ] && { mkdir -p priv; cp -r $el priv; })
+    (cd $dist; for el in bin lib; [ -d $el ] && { mkdir -p priv; cp -r $el priv })
     [ -d $dist/ebin ] && (cd $dist/ebin; echo 'beam_lib:strip_files(filelib:wildcard("*beam")), init:stop().' | erl >/dev/null) || _warn "($pkg_name) no ebin directory"
-    for el in $(/bin/ls -1 $dist/priv/**/*(*N) $dist/priv/**/*\.so(N) | grep "/priv/" | sort -u)
+    for el in $(/bin/ls -1 $dist/**/* | xargs file | grep -E "ELF|executable")  # should work for linux osx bsd and windows
     do
-        strip -S $el 2>/dev/null && destepkg=$epkg # package is platform specific
+        strip -S $el 2>/dev/null # does not cross-strip anyway
+        destepkg=$epkg # package is platform specific
     done
     [ -e $destepkg ] && {
-        _info "($pkg_name) using available generic package"
+        _info "($pkg_name) using generic package"
     } || {
+        # enforce unconsistant packages, try to clean a bit
+        [ -d $dist/bin ] && mkdir $dist/priv 2>/dev/null
+        [ -d $dist/lib ] && mkdir $dist/priv 2>/dev/null
+        [ -d $dist/asn1 ] && mkdir $dist/priv 2>/dev/null
+        [ -d $dist/contribs ] && mkdir $dist/priv 2>/dev/null
+        [ -d $dist/c_src ] && mkdir $dist/src 2>/dev/null
+        [ -d $dist/java_src ] && mkdir $dist/src 2>/dev/null
+        [ -d $dist/examples ] && mkdir $dist/doc 2>/dev/null
         # Generate main ez and other archives
-        [ -d $dist/src ] && { zip -9qr $dist.src.zip $dist/src >/dev/null; rm -Rf $dist/src; }
-        [ -d $dist/c_src ] && { zip -9qgr $dist.src.zip $dist/c_src >/dev/null; rm -Rf $dist/c_src; }
+        [ -d $dist/src ] && { zip -9qr $dist.src.zip $dist/src >/dev/null; rm -Rf $dist/src }
+        [ -d $dist/c_src ] && { zip -9qgr $dist.src.zip $dist/c_src >/dev/null; rm -Rf $dist/c_src }
+        [ -d $dist/java_src ] && { zip -9qgr $dist.src.zip $dist/java_src >/dev/null; rm -Rf $dist/java_src }
         [ -d $dist/include ] && zip -9qgr $dist.src.zip $dist/include >/dev/null
-        [ -d $dist/doc ] && { zip -9qr $dist.doc.zip $dist/doc >/dev/null; rm -Rf $dist/doc; }
-        [ -d $dist/examples ] && { zip -9qgr $dist.doc.zip $dist/examples >/dev/null; rm -Rf $dist/examples; }
-        [ -d $dist/priv ] && { zip -9qr $dist.priv.zip $dist/priv >/dev/null; rm -Rf $dist/priv; }
+        [ -d $dist/doc ] && { zip -9qr $dist.doc.zip $dist/doc >/dev/null; rm -Rf $dist/doc }
+        [ -d $dist/examples ] && { zip -9qgr $dist.doc.zip $dist/examples >/dev/null; rm -Rf $dist/examples }
+        [ -d $dist/priv ] && { zip -9qr $dist.priv.zip $dist/priv >/dev/null; rm -Rf $dist/priv }
+        [ -d $dist/mibs ] && { zip -9qgr $dist.priv.zip $dist/mibs >/dev/null; rm -Rf $dist/mibs }
+        [ -d $dist/bin ] && { zip -9qgr $dist.priv.zip $dist/bin >/dev/null; rm -Rf $dist/bin }
+        [ -d $dist/lib ] && { zip -9qgr $dist.priv.zip $dist/lib >/dev/null; rm -Rf $dist/lib }
+        [ -d $dist/asn1 ] && { zip -9qgr $dist.priv.zip $dist/asn1 >/dev/null; rm -Rf $dist/asn1 }
+        [ -d $dist/contribs ] && { zip -9qgr $dist.priv.zip $dist/contribs >/dev/null; rm -Rf $dist/contribs }
+        [ -d $dist/emacs ] && rm -Rf $dist/emacs
         zip -9qr $dist.ez $dist >/dev/null
-        # Generate epkg and fill records
+        # Generate epkg and fill .pub records
         mkdir -p $destepkg:h
         tar cf $destepkg *zip(N) *ez
         [ -f $destepkg:h/$pkg_name.pub ] || cp $spec $destepkg:h
