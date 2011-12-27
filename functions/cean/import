@@ -84,10 +84,10 @@ debian)
     local arch=$1 lib=$2 vsn=$3 otp
     local dir deb url="http://ftp.ch.debian.org"
     case $arch in
-    avr32|sh4|sparc64) url+="/debian-ports" ;;
-    *) url+="/debian" ;;
+    avr32|sh4|sparc64) url+="/debian-ports/pool-$arch" ;;
+    *) url+="/debian/pool" ;;
     esac
-    url+="/pool/main/$lib[1]/$lib"
+    url+="/main/$lib[1]/$lib"
     _cd_workdir
     [[ $lib == "erlang" ]] && {
         local -a otpvsn
@@ -108,6 +108,7 @@ debian)
             curl -f $url/$deb > $deb
             dpkg-deb -x $deb .
         done
+        url=${url/pool-$arch/pool}
         for lib in examples ic-java jinterface doc src
         do
             deb=erlang-${lib}_${vsn}_all.deb
