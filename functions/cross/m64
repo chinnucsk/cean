@@ -6,6 +6,7 @@
 
 _api_check "cross/m64" $* || return $bad_use
 local package=$1
+local flags="-m64 -march=nocona"
 _error "not implemented yet"
 return $cancel
 

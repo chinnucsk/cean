@@ -6,6 +6,7 @@
 
 _api_check "cross/m32" $* || return $bad_use
 local package=$1
+local flags="-m32 -march=pentiumpro"
 _error "not implemented yet"
 return $cancel
 export CFLAGS="-m32"
