@@ -12,7 +12,10 @@ return $cancel
 
 case $package in
 otp)
-./configure --enable-m64-build --enable-halfword-emulator
+case $(uname -s) in
+Darwin) ./configure --enable-darwin-64bit ;;
+*) ./configure --enable-m64-build ;;
+esac
 ;;
 *)
 export CFLAGS="-m64"
