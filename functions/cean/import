@@ -7,12 +7,14 @@
 _api_check "cean/import cache|pub|archive|debian|bootstraps [args]" $* || return $bad_use
 local action=$1; shift
 local srvsh=cean@${CEAN_SERVER#http://}
+unset pkg_name
 
 bootstrap() {
     local otp=$1 arch=$2
     mkdir src tmp
     rm bin/*(D@)
     cp erts-*/bin/* bin && rm -Rf erts-*
+    rm bin/*script
     cp -r $CEAN_ROOT/lib/cean-* lib
     (cd lib
      ln -s kernel-* kernel
@@ -42,7 +44,7 @@ epkg() {
     }
     pkg_name=${${dir:t}%%-*}; pkg_vsn=${dir#*-}
     _pkg_spec >/dev/null || {
-        _warn "($pkg_name) no package specification, generating epkg anyway"
+        _warn "($pkg_name) no package specification, generating archive anyway"
         echo "create package specification for $pkg_name" >> $CEAN_ROOT/TODO
     }
     (cd $dir:h; tar zcf $CEAN_ROOT/tmp/$(_pkg_dist).tgz $dir:t)
@@ -100,13 +102,22 @@ debian)
         dpkg-deb -x $deb .
         for lib in appmon asn1 common-test corba crypto debugger dev dialyzer diameter docbuilder edoc erl-docgen et \
                    eunit gs ic inets inviso megaco mnesia observer odbc os-mon parsetools percept pman public-key \
-                   reltool runtime-tools snmp ssh ssl syntax-tools test-server toolbar tools tv typer webtool wx xmerl \
-                   examples ic-java jinterface mode src doc
+                   reltool runtime-tools snmp ssh ssl syntax-tools test-server toolbar tools tv typer webtool wx xmerl
         do
             deb=erlang-${lib}_${vsn}_${arch}.deb
             curl -f $url/$deb > $deb
             dpkg-deb -x $deb .
         done
+        for lib in examples ic-java jinterface doc src
+        do
+            deb=erlang-${lib}_${vsn}_all.deb
+            curl -f $url/$deb > $deb
+            dpkg-deb -x $deb .
+        done
+        rm -f usr/lib/erlang/lib/*/{doc,info}
+        for lib in usr/share/doc/erlang-doc/lib/*(/); mv $lib/doc usr/lib/erlang/lib/$lib:t
+        # ignore erts and main doc by now
+        # located at usr/share/doc/erlang-doc/doc and usr/share/doc/erlang-doc/erts-*/doc
         lib=otp
     } || {
         otp=$ERLANG_VERSION  # assume user don't do ugly imports
