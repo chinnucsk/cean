@@ -63,7 +63,7 @@ debian)
     _cd_workdir
     [[ $lib == "erlang" ]] && {
         local -a otpvsn
-        otp=${vsn%-*}
+        otp=${vsn%%-*}
         otpvsn=(${(s|.|)otp})
         otp="R$otpvsn[1]$otpvsn[2]:u${(l:2::0:)otpvsn[3]}"
         deb=erlang-base-hipe_${vsn}_${arch}.deb
