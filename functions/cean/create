@@ -37,29 +37,31 @@ else
         _error "could not fetch bootstrap"
         return $network_error
     }
-    bootstrap/build $vsn || {
+    bootstrap/build $vsn $arch || {
         _error "could not build bootstrap"
         return $internal_error
     }
-    bootstrap/install $vsn $PWD $profile || {
+    bootstrap/install $vsn $PWD $profile $arch || {
         _error "could not install bootstrap"
         return $internal_error
     }
 fi
 
-cat > .ceanrc << END
+:> .ceanrc
+[[ $arch == $CEAN_HOSTARCH ]] || echo "CEAN_HOSTARCH=$arch" >> .ceanrc
+cat >> .ceanrc << END
 ERLANG_VERSION=$vsn
 CEAN_ROOT=\$PWD
 CEAN_SERVER=http://cean.process-one.net
-CEAN_REPOSITORY=/pub/$arch/${vsn%[A-D]*}
+CEAN_REPOSITORY=/bin/\$CEAN_HOSTARCH/${vsn%[A-D]*}
 PATH=\$CEAN_ROOT/bin:\$PATH
 PROMPT_THEME=cean
 
 # Add your favorite commands bellow
 # note: find your favorite commands with cean/stats
 # see global aliases in ~/.cean/cfg/aliases
-#alias pkl='package/list'
-#alias pks='package/search'
+alias pkl='package/list'
+alias pks='package/search'
 #alias ej='map package exmpp ejabberd'
 END
 source .ceanrc

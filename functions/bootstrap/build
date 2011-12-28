@@ -4,8 +4,8 @@
 # Usage: bootstrap/build R13B04
 # vim: set foldmarker=#(,#) foldmethod=marker ts=4 sw=4 sts=4 et syntax=zsh:
 
-_api_check "bootstrap/build otp_version" $* || return $bad_use
-local vsn=$1 otpdir=otp_src_$1
+_api_check "bootstrap/build otp_version [arch]" $* || return $bad_use
+local vsn=$1 otpdir=otp_src_$1 arch=${2:-$CEAN_HOSTARCH}
 local lib sources=~/.cache/cean/sources/$otpdir.tar.gz
 
 [ -e $sources ] || return $missing_sources
@@ -14,7 +14,16 @@ cd src
 tar zxf $sources
 cd $otpdir
 mkdir dist
-./configure --prefix=$PWD/dist
+
+# configure, TODO: handle cross-building
+case $arch in
+darwin-x86_64) ./configure --prefix=$PWD/dist --enable-darwin-64bit ;;
+linux-x86_64) ./configure --prefix=$PWD/dist --enable-m64-build ;;
+linux-x86) ./configure --prefix=$PWD/dist --enable-m32-build ;;
+*) ./configure --prefix=$PWD/dist ;;
+esac
+
+# compile
 which gmake >/dev/null 2>/dev/null && gmake || make
 cd bootstrap
 for lib in ~/.cean/lib/*

@@ -4,7 +4,7 @@
 # Usage: cean/import archive
 # vim: set foldmarker=#(,#) foldmethod=marker ts=4 sw=4 sts=4 et syntax=zsh:
 
-_api_check "cean/import cache|pub|archive|debian|bootstraps [args]" $* || return $bad_use
+_api_check "cean/import cache|pub|archive|debian|bootstrap|bootstraps [args]" $* || return $bad_use
 local action=$1; shift
 local srvsh=cean@${CEAN_SERVER#http://}
 unset pkg_name
@@ -133,15 +133,37 @@ debian)
     [[ $lib == "otp" ]] && (cd usr/lib/erlang; bootstrap $otp $arch)
     _rm_workdir
     package/install $lib $arch ;;
+bootstrap)
+    # imports binary archive from local bootstrap
+    # usage: cean/import bootstrap [R14B04] [linux-amd64]
+    local otp=${1:-$ERLANG_VERSION} arch=${2:-$CEAN_HOSTARCH}
+    local dir archive=~/.cache/cean/bootstraps/${otp}_${arch}_full.tar.gz
+    [ -e $archive ] && {
+        _cd_workdir
+        tar zxf $archive
+        rm lib/{kernel,stdlib}
+        for dir in lib/*; epkg $otp $arch $dir
+        _rm_workdir
+        package/install otp $arch
+    } || {
+        _error "no bootstrap available for $otp on $arch"
+        _error "  try: cean/import bootstraps $otp $arch"
+        return $import_error
+    }
+    ;;
 bootstraps)
-    (cd ~/.cache/cean/bootstraps
-     for archive in mini base full
-     do
-         archive=${ERLANG_VERSION}_${1:-$CEAN_HOSTARCH}_${archive}.tar.gz
-         [ -f $archive ] || curl $CEAN_SERVER/pub/bootstraps/$archive > $archive
-     done)
+    # imports bootstraps from CEAN site
+    # usage: cean/import bootstraps [R14B04] [linux-amd64]
+    local otp=${1:-$ERLANG_VERSION} arch=${2:-$CEAN_HOSTARCH}
+    local archive file
+    for archive in mini base full
+    do
+        archive=${otp}_${arch}_${archive}.tar.gz
+        file=~/.cache/cean/bootstraps/$archive
+        [ -f $file ] || curl $CEAN_SERVER/pub/bootstraps/$archive > $file
+    done
     ;;
 *)
-    _usage "cean/import cache|pub|archive|debian|bootstraps [args]"
+    _usage "cean/import cache|pub|archive|debian|bootstrap|bootstraps [args]"
     return $bad_use ;;
 esac

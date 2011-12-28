@@ -157,6 +157,7 @@ _pkg_read_spec() {
     [ -z $pkg_vsn ] && {
         pub=$(_pkg_pubspec)
         [[ $pub == "." ]] && pkg_vsn="0" || pkg_vsn=$(sed '$!d;s/{"\(.[^"]*\)".*/\1/' $pub)
+        [[ $pkg_vsn == "0" ]] && for pkg_vsn in $CEAN_ROOT/tmp/${pkg_name}-*(N:t:r); pkg_vsn=${pkg_vsn#*-} # hackish, but helpfull for cean/import bootstrap
     }
     return $success
 }

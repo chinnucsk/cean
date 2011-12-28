@@ -4,8 +4,8 @@
 # Usage: bootstrap/install R13B04 $HOME/mycean
 # vim: set foldmarker=#(,#) foldmethod=marker ts=4 sw=4 sts=4 et syntax=zsh:
 
-_api_check "bootstrap/install otp_version dest_dir [mini|base|full]" $* || return $bad_use
-local erts lib vsn=$1 destdir=$2 otpdir=otp_src_$1 profile=${3:-mini}
+_api_check "bootstrap/install otp_version dest_dir [mini|base|full] [arch]" $* || return $bad_use
+local erts lib vsn=$1 destdir=$2 otpdir=otp_src_$1 profile=${3:-mini} arch=${4:-$CEAN_HOSTARCH}
 local sources=~/.cache/cean/sources/$otpdir.tar.gz
 
 cd $destdir
@@ -43,16 +43,13 @@ export PROGNAME
 exec \$BINDIR/erlexec \${1+"\$@"}
 END
 
-# force creation of standard core bootstrap
-# tar zcf ~/.cache/cean/bootstraps/${vsn}_${CEAN_HOSTARCH}_core.tar.gz bin usr lib
-
 # then use boostrap generation script on clean install
 for lib in tmp/*tgz; tar -C lib -zxf $lib
 rm -Rf lib/*/{examples,src,c_src}
 ls -d lib/erts*(N) | grep -q erts || mkdir lib/erts-$erts
 echo 'beam_lib:strip_files(filelib:wildcard("lib/*/ebin/*beam")), init:stop().' | bin/erl >/dev/null
-export/bootstrap $vsn
+export/bootstrap $vsn $arch
 
 # finally, apply the wanted bootstrap
 rm -Rf lib
-tar zxf ~/.cache/cean/bootstraps/${vsn}_${CEAN_HOSTARCH}_${profile}.tar.gz
+tar zxf ~/.cache/cean/bootstraps/${vsn}_${arch}_${profile}.tar.gz
