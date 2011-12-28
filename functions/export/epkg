@@ -12,6 +12,7 @@ local buildtar=$CEAN_ROOT/tmp/$dist.tgz
 
 [ -e $epkg ] && {
     _warn "($pkg_name) package already available in ${epkg/$CEAN_ROOT/}"
+    [ -f $buildtar ] && rm $buildtar
     return $success
 }
 [ -f $buildtar ] && {
@@ -22,7 +23,7 @@ local buildtar=$CEAN_ROOT/tmp/$dist.tgz
     # Strip beam and binaries, and define if generic or not
     (cd $dist; for el in bin lib; [ -d $el ] && { mkdir -p priv; cp -r $el priv })
     [ -d $dist/ebin ] && (cd $dist/ebin; echo 'beam_lib:strip_files(filelib:wildcard("*beam")), init:stop().' | erl >/dev/null) || _warn "($pkg_name) no ebin directory"
-    for el in $(/bin/ls -1 $dist/**/* | xargs file | grep -E "ELF|executable")  # should work for linux osx bsd and windows
+    for el in $(/bin/ls -1 $dist/**/* | xargs file | grep -E "ELF|bundle|executable")  # should work for linux osx bsd and windows
     do
         strip -S $el 2>/dev/null # does not cross-strip anyway
         destepkg=$epkg # package is platform specific
