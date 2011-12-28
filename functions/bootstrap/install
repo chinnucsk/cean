@@ -23,7 +23,7 @@ for lib in ~/.cean/lib/*
 (cd dist/lib/erlang/lib
  for lib in *; tar zcf $destdir/tmp/$lib.tgz $lib)
 cd $destdir
-ls bin/*(*) | xargs strip 2>/dev/null
+ls bin/*(*) | xargs strip -S 2>/dev/null
 (cd lib
  ln -s kernel-* kernel
  ln -s stdlib-* stdlib)
