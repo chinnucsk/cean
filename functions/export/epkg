@@ -18,7 +18,7 @@ local buildtar=$CEAN_ROOT/tmp/$dist.tgz
 [ -f $buildtar ] && {
     _info "($pkg_name) generating package ${epkg/$CEAN_ROOT/}..."
     _cd_workdir
-    local el
+    local el status
     tar zxf $buildtar
     # Strip beam and binaries, and define if generic or not
     (cd $dist; for el in bin lib; [ -d $el ] && { mkdir -p priv; cp -r $el priv })
