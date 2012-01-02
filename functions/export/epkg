@@ -18,7 +18,7 @@ local buildtar=$CEAN_ROOT/tmp/$dist.tgz
 [ -f $buildtar ] && {
     _info "($pkg_name) generating package ${epkg/$CEAN_ROOT/}..."
     _cd_workdir
-    local el status
+    local el check
     tar zxf $buildtar
     # Strip beam and binaries, and define if generic or not
     (cd $dist; for el in bin lib; [ -d $el ] && { mkdir -p priv; cp -r $el priv })
@@ -58,8 +58,8 @@ local buildtar=$CEAN_ROOT/tmp/$dist.tgz
         mkdir -p $destepkg:h
         tar cf $destepkg *zip(N) *ez
         [ -f $destepkg:h/$pkg_name.pub ] || cp $spec $destepkg:h
-        [ -d $dist/priv ] && status="test" || status="good"
-        echo 'cean_tools:update_pub("$destepkg:h/$pkg_name.pub", "$pkg_vsn", "$(date +%Y.%m%d)", "$status"), init:stop().' | erl >/dev/null
+        [ -d $dist/priv ] && check="test" || check="good"
+        echo 'cean_tools:update_pub("$destepkg:h/$pkg_name.pub", "$pkg_vsn", "$(date +%Y.%m%d)", "$check"), init:stop().' | erl >/dev/null
     }
     rm $buildtar
     _rm_workdir
