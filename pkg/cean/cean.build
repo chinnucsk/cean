@@ -3,7 +3,8 @@ pkg_fetch() {
     [ -d $(_pkg_sources) ] && {
         _info "($pkg_name) updating local repository..."
         (_pkg_cd_sources
-         cp -r $HOME/.cean/lib/cean-${pkg_vsn}/* .
+         rsync -av --delete $HOME/.cean/lib/cean-${pkg_vsn}/* .
+         git add src/*
          echo "VSN=$pkg_vsn" > vsn.mk
          git status | grep -q modified && git commit -a -m "automatic update" || :) 
     } || {
