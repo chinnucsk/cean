@@ -28,9 +28,9 @@ for package in $(find $CEAN_ROOT/pub/bin -type f -name "*epkg" | grep "/${ERLANG
 do
     _cd_workdir
     tar xf $package
-    package=$package:t:r
-    nbsrc=$((`unzip -l $package.src.zip 2>/dev/null | grep "\.erl" | wc -l`))
-    nbbeam=$((`unzip -l $package.ez 2>/dev/null | grep "\.beam" | wc -l`))
+    real=$package:t:r
+    nbsrc=$((`unzip -l $real.src.zip 2>/dev/null | grep "\.erl" | wc -l`))
+    nbbeam=$((`unzip -l $real.ez 2>/dev/null | grep "\.beam" | wc -l`))
     _rm_workdir
     [ $nbsrc -eq 0 ] && _warn ${package/$CEAN_ROOT/} does not have sources
     [ $nbbeam -eq 0 ] && _warn ${package/$CEAN_ROOT/} compilation failed || {
