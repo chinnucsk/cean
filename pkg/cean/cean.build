@@ -1,5 +1,5 @@
 pkg_fetch() {
-    pkg_vsn=$CEAN_VSN
+    pkg_vsn=$CEAN_VERSION
     [ -d $(_pkg_sources) ] && {
         _info "($pkg_name) updating local repository..."
         (_pkg_cd_sources
@@ -14,7 +14,7 @@ pkg_fetch() {
          git init
          cp -r $HOME/.cean/lib/cean-${pkg_vsn}/* .
          echo "VSN=$pkg_vsn" > vsn.mk
-         git add src *
+         git add *
          git commit -m "initial commit")
     }
 }

@@ -5,7 +5,7 @@
 # vim: set foldmarker=#(,#) foldmethod=marker ts=4 sw=4 sts=4 et syntax=zsh:
 
 _api_check "cean/export" $* || return $bad_use
-local srvsh=cean@${CEAN_SERVER#http://}
+local srvsh=cean@$CEAN_SERVER
 
 cean/check
 rsync -av $CEAN_ROOT/pub/bin/ $srvsh:pub/bin/

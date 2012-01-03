@@ -1,7 +1,7 @@
 # Description: Global CEAN helpers
 # Author: Christophe Romain <cromain@process-one.net>
 # Depends: sed grep
-# Usage: cean/global  (mostly invoqued by cean shell command)
+# Usage: cean/init  (mostly invoqued by cean shell command)
 # vim: set foldmarker=#(,#) foldmethod=marker ts=4 sw=4 sts=4 et syntax=zsh:
 
 # help functions

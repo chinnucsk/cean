@@ -51,10 +51,8 @@ fi
 [[ $arch == $CEAN_HOSTARCH ]] || echo "CEAN_HOSTARCH=$arch" >> .ceanrc
 cat >> .ceanrc << END
 ERLANG_VERSION=$vsn
-CEAN_ROOT=\$PWD
-CEAN_SERVER=http://cean.process-one.net
+CEAN_SERVER=cean.process-one.net
 CEAN_REPOSITORY=/bin/\$CEAN_HOSTARCH/${vsn%[A-D]*}
-PATH=\$CEAN_ROOT/bin:\$PATH
 PROMPT_THEME=cean
 
 # Add your favorite commands bellow

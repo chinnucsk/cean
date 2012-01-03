@@ -6,7 +6,7 @@
 
 _api_check "cean/import cache|pub|archive|debian|bootstrap|bootstraps [args]" $* || return $bad_use
 local action=$1; shift
-local srvsh=cean@${CEAN_SERVER#http://}
+local srvsh=cean@$CEAN_SERVER
 unset pkg_name
 
 bootstrap() {
@@ -160,7 +160,7 @@ bootstraps)
     do
         archive=${otp}_${arch}_${archive}.tar.gz
         file=~/.cache/cean/bootstraps/$archive
-        [ -f $file ] || curl $CEAN_SERVER/pub/bootstraps/$archive > $file
+        [ -f $file ] || curl http://$CEAN_SERVER/bin/bootstraps/$archive > $file
     done
     ;;
 *)
