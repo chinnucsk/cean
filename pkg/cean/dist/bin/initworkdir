@@ -41,4 +41,14 @@ CEAN_ROOT=$PWD
 PATH=$CEAN_ROOT/bin:$PATH
 PROMPT_THEME=cean
 EOF
+cat << EOF
+you should consider adding an alias in your shell (.bashrc, .zshrc or whatever)
+so you quickly create/jump to your working environement(s)
+example:
+alias cean='\$HOME/.cean/bin/cean shell'
+alias ceaninit='\$HOME/.cean/bin/cean create'
+ceaninit /path/to/R13 R13B04
+cean /path/to/workdir
+
+EOF
 $HOME/.cean/bin/cean shell
