@@ -160,7 +160,7 @@ bootstraps)
     do
         archive=${otp}_${arch}_${archive}.tar.gz
         file=~/.cache/cean/bootstraps/$archive
-        [ -f $file ] || curl http://$CEAN_SERVER/bin/bootstraps/$archive > $file
+        [ -f $file ] || curl http://$CEAN_SERVER/bootstraps/$archive > $file
     done
     ;;
 *)
