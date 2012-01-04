@@ -1,8 +1,8 @@
 case `uname -m` in
 i[3456]86) arch=x86 ;;
 i86pc) arch=x86 ;;
-arm*b) arch=armeb ;;
-arm*) arch=arm ;;
+armv7*) arch=armhf ;;
+arm*l) arch=armel ;;
 *) arch=`uname -m` ;;
 esac
 os=`uname -s`
