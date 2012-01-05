@@ -6,17 +6,17 @@
 
 _api_check "cean/install package [vsn]" $* || return $bad_use
 [[ $1 == $pkg_name ]] || _pkg_read_spec $1
-[ -z $2 ] || pkg_vsn=$2
+[ -z $2 ] && pkg_vsn="0" || pkg_vsn=$2
 local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
 
 # ensure we have requested epkg in local store
 [ -f $epkg ] || {
-    local url=${epkg/$CEAN_ROOT/$CEAN_SERVER}
+    local url=${epkg/$CEAN_ROOT\/pub/$CEAN_SERVER}
     url=$url:h
     [[ $pkg_vsn == "0" ]] && {
         # if we don't have been asked for a given version, we try to
         # guess the latest available
-        pkg_vsn=$(curl http://$url/${pkg_name}.pub | sed '$!d;s/{"\(.[^"]*\)".*/\1/;s/<.*>/0/')
+        pkg_vsn=$(curl http://$url/${pkg_name}.pub | sed '$!d;s/.*"\(.[^"]*\)", ".*/\1/;s/<.*>/0/')
         [[ $pkg_vsn == "0" ]] && {
             _error "($pkg_name) could not find any epkg archive"
             return $missing_package
@@ -25,6 +25,7 @@ local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
     }
     epkg=$(_pkg_epkg)
     dist=$(_pkg_dist)
+    mkdir -p $epkg:h
     curl http://$url/$dist.epkg > $epkg
     tar tf $epkg 2>/dev/null && {
         curl http://$url/${pkg_name}.pub > $epkg:h/${pkg_name}.pub
@@ -40,10 +41,8 @@ local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
 }
 
 # install package into local bootstrap
-# TODO: better do that way: echo 'cean:install($package), init:stop().' | erl -noshell
-mkdir tmp/$$
-tar -C tmp/$$ -xf $epkg
-#rm -Rf $CEAN_ROOT/lib/${pkg_name}-* # better let user decide to clean bootstrap or not
-unzip -qqo tmp/$$/$dist.ez -d $CEAN_ROOT/lib
-[ -f tmp/$$/$dist.priv.zip ] && unzip -qqo tmp/$$/$dist.priv.zip -d $CEAN_ROOT/lib
-rm -Rf tmp/$$
+_cd_workdir
+tar -xf $epkg
+unzip -qqo $dist.ez -d $CEAN_ROOT/lib
+[ -f $dist.priv.zip ] && unzip -qqo $dist.priv.zip -d $CEAN_ROOT/lib
+_rm_workdir
