@@ -6,7 +6,7 @@
 
 _api_check "cean/install package [vsn]" $* || return $bad_use
 [[ $1 == $pkg_name ]] || _pkg_read_spec $1
-[ -z $2 ] && pkg_vsn="0" || pkg_vsn=$2
+[ -z $2 ] || pkg_vsn=$2
 local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
 
 # ensure we have requested epkg in local store
