@@ -16,7 +16,7 @@ local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
     [[ $pkg_vsn == "0" ]] && {
         # if we don't have been asked for a given version, we try to
         # guess the latest available
-        pkg_vsn=$(curl http://$url/${pkg_name}.pub | sed '$!d;s/.*"\(.[^"]*\)", ".*/\1/;s/<.*>/0/')
+        pkg_vsn=$(curl -s http://$url/${pkg_name}.pub | sed '$!d;s/.*"\(.[^"]*\)", ".*/\1/;s/<.*>/0/')
         [[ $pkg_vsn == "0" ]] && {
             _error "($pkg_name) could not find any epkg archive"
             return $missing_package
@@ -26,9 +26,9 @@ local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
     epkg=$(_pkg_epkg)
     dist=$(_pkg_dist)
     mkdir -p $epkg:h
-    curl http://$url/$dist.epkg > $epkg
-    tar tf $epkg 2>/dev/null && {
-        curl http://$url/${pkg_name}.pub > $epkg:h/${pkg_name}.pub
+    curl -s http://$url/$dist.epkg > $epkg
+    tar tf $epkg >/dev/null 2>/dev/null && {
+        curl -s http://$url/${pkg_name}.pub > $epkg:h/${pkg_name}.pub
     } || {
         [ -f $epkg ] && {
             rm $epkg
@@ -39,6 +39,7 @@ local epkg=$(_pkg_epkg) dist=$(_pkg_dist)
         return $missing_package
     }
 }
+_info "($pkg_name) package available at ${epkg/$CEAN_ROOT/}"
 
 # install package into local bootstrap
 _cd_workdir
@@ -46,3 +47,4 @@ tar -xf $epkg
 unzip -qqo $dist.ez -d $CEAN_ROOT/lib
 [ -f $dist.priv.zip ] && unzip -qqo $dist.priv.zip -d $CEAN_ROOT/lib
 _rm_workdir
+_info "($pkg_name) installed in /lib/$dist"
