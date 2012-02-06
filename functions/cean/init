@@ -25,13 +25,13 @@ todo() { grep -r TODO ~/.cean*/{pkg,functions} | grep -v "todo()"; }
 
 # meta functions
 package() {
-    _pkg_read_spec $1
+    package/fetch $*
     local epkg=$(_pkg_epkg $2)
     [ -e $epkg ] && {
         _warn "($pkg_name) package already available in ${epkg/$CEAN_ROOT/}"
         return $success
     }
-    package/fetch $* && package/build $1 && package/install $1
+    package/build $1 && package/install $1
 }
 map() {
     _api_check "map function package [pacakge pacakage ...]" $* || return $bad_use
