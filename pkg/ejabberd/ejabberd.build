@@ -28,9 +28,10 @@ pkg_install() {
     (cd src; $MAKE distclean)
     (cd $dist
      mv ../src .
-     mv lib/ejabberd/* . ; rm -Rf lib
-     mkdir priv/cfg ; mv etc/ejabberd/* priv/cfg ; rm -Rf etc
-     mv sbin/* priv/bin ; rm -Rf sbin
-     mv share/doc/ejabberd doc ; rm -Rf share
-     rm -Rf var)
+     mv lib/ejabberd/* . || mv var/lib/ejabberd/* .
+     mv sbin/* priv/bin
+     mkdir priv/cfg
+     mv etc/ejabberd/* priv/cfg
+     mv share/doc/ejabberd doc
+     rm -Rf lib var db sbin etc share)
 }
