@@ -17,5 +17,5 @@ _info "(cean) reload internal functions"
 for cfg in ~/.cean*/cfg/*; source $cfg
 for mod in ~/.cean*/functions/*/*; freload ${mod#*functions/}
 _info "(cean) restart environment"
-[ -f .ceanrc ] && source .ceanrc
 cean/init
+[ -f .ceanrc ] && source .ceanrc
