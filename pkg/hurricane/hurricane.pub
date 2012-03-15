@@ -1,0 +1,9 @@
+{author, {"Hurricane", ""}}.
+{packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
+{category, []}.  % please edit
+{depends, []}.   % please edit
+{keywords, []}.  % please edit
+{summary, "A scalable, extensible, distributed messaging system."}.
+{abstract, ""}.  % please edit
+{home, "https://github.com/hurricane/hurricane"}.
+{url, "git://github.com/hurricane/hurricane.git"}.

@@ -1,9 +1,9 @@
-{author, {"Dave Fayram", "dfayram@gmail.com"}}.
+{author, {"Joel Reymont", "joelr1@gmail.com"}}.
 {packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, "the Erlang-based frontend for web apps."}.
+{summary, ""}.
 {abstract, ""}.  % please edit
-{home, "https://github.com/KirinDave/fuzed"}.
-{url, "git://github.com/KirinDave/fuzed.git"}.
+{home, "https://github.com/wagerlabs/openpoker"}.
+{url, "git://github.com/wagerlabs/openpoker.git"}.

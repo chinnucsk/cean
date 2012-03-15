@@ -1,9 +1,9 @@
-{author, {"Dave Fayram", "dfayram@gmail.com"}}.
+{author, {"Tim Watson", ""}}.
 {packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, "the Erlang-based frontend for web apps."}.
+{summary, "Simple code instrumentation utilities."}.
 {abstract, ""}.  % please edit
-{home, "https://github.com/KirinDave/fuzed"}.
-{url, "git://github.com/KirinDave/fuzed.git"}.
+{home, "https://github.com/hyperthunk/annotations"}.
+{url, "git://github.com/hyperthunk/annotations.git"}.

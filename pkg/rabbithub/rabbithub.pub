@@ -1,0 +1,9 @@
+{author, {"Tony Garnock-Jones", "tonygarnockjones@gmail.com"}}.
+{packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
+{category, []}.  % please edit
+{depends, []}.   % please edit
+{keywords, []}.  % please edit
+{summary, "Experimental RabbitMQ PubSubHubBub interface."}.
+{abstract, ""}.  % please edit
+{home, "https://github.com/tonyg/rabbithub"}.
+{url, "git://github.com/tonyg/rabbithub.git"}.
