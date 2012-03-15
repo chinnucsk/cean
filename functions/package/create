@@ -21,8 +21,8 @@ case $url in
 https://github.com/*)
     curl -s $url:h > author
     curl -s $url > project
-    author_name=$(sed -e '/"fn"/!d;s/ *</</;s/<.[^>]*>//g' author)
-    author_email=$(sed -e '/"email"/!d;s/.*(.\(.*\).)).*/\1/' author)
+    author_name=$(sed -e '/="name"/!d;s/.*"name">//;s/<.*//' author)
+    author_email=$(sed -e '/obfuscate-email/!d;s/.*data-email="//;s/".*//' author)
     author_email=$(echo $author_email | sed -e 's/%\([0-9a-f][0-9a-f]\)/\\\\\x\1/g' | xargs printf | sed -e 's/.*>\(.*\)<.*/\1/')
     src_url=$(sed -e '/public_clone_url/!d;s/.*git:\(.*\)\.git.*/git:\1\.git/' project)
     summary=$(grep -A1 repository_description project | sed -e '/text/!d;s/.*value="\(.*\)".*/\1/')
