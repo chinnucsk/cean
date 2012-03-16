@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "HTML templating library."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/permelin/brim"}.
 {url, "git://github.com/permelin/brim.git"}.

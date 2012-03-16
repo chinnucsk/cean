@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Unicode eXtention for Erlang (Strings, Collation)."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/freeakk/ux"}.
 {url, "git://github.com/freeakk/ux.git"}.

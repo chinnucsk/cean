@@ -1,9 +1,9 @@
-{author, {"    ", "contact@ninenines.eu"}}.
+{author, {"Nine Nines' Extend Initiative", "contact@ninenines.eu"}}.
 {packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Small, fast, modular HTTP server and socket acceptor pool."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/extend/cowboy"}.
 {url, "git://github.com/extend/cowboy.git"}.

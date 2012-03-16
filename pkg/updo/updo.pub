@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Lightweight code update."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/permelin/updo"}.
 {url, "git://github.com/permelin/updo.git"}.

@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "OAuth Erlang client and server."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/EchoTeam/oauth"}.
 {url, "git://github.com/EchoTeam/oauth.git"}.

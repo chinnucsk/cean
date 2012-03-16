@@ -1,9 +1,9 @@
-{author, {"    ", "community_admin@membase.com"}}.
+{author, {"Membase", "community_admin@membase.com"}}.
 {packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "implementation of Cucumber parser & driver."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/membase/cucumberl"}.
 {url, "git://github.com/membase/cucumberl.git"}.

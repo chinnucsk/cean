@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Rebar-friendly fork of rabbitmq-erlang-client."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/jbrisbin/amqp_client"}.
 {url, "git://github.com/jbrisbin/amqp_client.git"}.

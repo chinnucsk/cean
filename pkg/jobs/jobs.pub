@@ -1,9 +1,9 @@
-{author, {"    ", "github@erlang-solutions.com"}}.
+{author, {"Erlang Solutions", "github@erlang-solutions.com"}}.
 {packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Job scheduler for load regulation."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/esl/jobs"}.
 {url, "git://github.com/esl/jobs.git"}.

@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Socket.IO server."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/yrashk/socket.io-erlang"}.
 {url, "git://github.com/yrashk/socket.io-erlang.git"}.

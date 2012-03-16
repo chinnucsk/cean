@@ -3,7 +3,7 @@
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "A scalable poker server that powers EA WSOP."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/wagerlabs/openpoker"}.
 {url, "git://github.com/wagerlabs/openpoker.git"}.

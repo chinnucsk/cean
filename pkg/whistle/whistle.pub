@@ -1,9 +1,9 @@
-{author, {"    ", "github@2600hz.com"}}.
+{author, {"The 2600hz Platform", "github@2600hz.com"}}.
 {packager, {"Christophe Romain", "christophe.romain@process-one.net"}}.
 {category, []}.  % please edit
 {depends, []}.   % please edit
 {keywords, []}.  % please edit
-{summary, ""}.
+{summary, "Scalable, distributed, cloud-based telephony platform."}.
 {abstract, ""}.  % please edit
 {home, "https://github.com/2600hz/whistle"}.
 {url, "git://github.com/2600hz/whistle.git"}.
