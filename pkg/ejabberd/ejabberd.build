@@ -30,8 +30,9 @@ pkg_install() {
      mv ../src .
      mv lib/ejabberd/* . || mv var/lib/ejabberd/* .
      mv sbin/* priv/bin
-     mkdir priv/cfg
+     mkdir priv/cfg priv/sql
      mv etc/ejabberd/* priv/cfg
+     mv src/odbc/*sql priv/sql
      mv share/doc/ejabberd doc
      rm -Rf lib var db sbin etc share)
 }
