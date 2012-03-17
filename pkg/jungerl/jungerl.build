@@ -4,11 +4,15 @@ pkg_fetch() {
     pkg_vsn=$(_pkg_cd_sources && _git_last_commit_date)
 }
 pkg_revision() {
-    [ -d src ] && {
-        vsn=$(git log -1 --pretty=format:"%ai" src)
-        echo $vsn | sed -e 's/-/\./;s/-//;s/ .*$//'
+    [ -f vsn.mk ] && {
+        sed 's/.*=//;s/ //g;q' vsn.mk
     } || {
-        _git_last_commit_date
+        [ -d src ] && {
+            vsn=$(git log -1 --pretty=format:"%ai" src)
+            echo $vsn | sed -e 's/-/\./;s/-//;s/ .*$//'
+        } || {
+            _git_last_commit_date
+        }
     }
 }
 pkg_init() {
