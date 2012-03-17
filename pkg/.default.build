@@ -21,7 +21,7 @@ pkg_fetch() {
     [[ "$pkg_vsn" == "" ]] && pkg_vsn=0 || :
 }
 pkg_revision() {
-    [ -f vsn.mk ] && sed -e '/VSN/!d;s/=/ /;s/.* //;q' vsn.mk || {
+    [ -f vsn.mk ] && sed -e '/VSN/!d;s/.*=//;s/ //g;q' vsn.mk || {
         case $pkg_url in
           *tar|*gz|*bz2|*zip) _git_last_revision ;;
           *) _git_best_revision ;;

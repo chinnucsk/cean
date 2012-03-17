@@ -1,0 +1,48 @@
+pkg_fetch() {
+    import/git $pkg_name $pkg_url $* || return $import_error
+    (cd $CEAN_ROOT/src; for lib in jungerl/lib/*(/); [ -e $lib:t ] || ln -s $lib $lib:t)
+    pkg_vsn=$(_pkg_cd_sources && _git_last_commit_date)
+}
+pkg_revision() {
+    [ -d src ] && {
+        vsn=$(git log -1 --pretty=format:"%ai" src)
+        echo $vsn | sed -e 's/-/\./;s/-//;s/ .*$//'
+    } || {
+        _git_last_commit_date
+    }
+}
+pkg_init() {
+    find lib -name .cvsignore | xargs rm
+    rm lib/Makefile
+    for lib in ce distel eldap eradius erl_img gettext gtkNode ibrowse measurement otp.net pgsql plain_fsm \
+               posix_drv quickcheck slang smart_exceptions ssh timebomb tuntap wumpus xmlrpc zlib
+        rm -Rf lib/$lib
+    (cd lib/msc/src; ln -s $CEAN_ROOT/src/kernel)
+    (cd lib/rdbms/src; ln -s $CEAN_ROOT/src/mnesia)
+    mkdir -p lib/rdbms/mnesia_patches/ebin
+    mkdir -p lib/rdbms/test/ebin
+    for lib in lib/*
+        [ -f $lib/vsn.mk ] || {
+            vsn=$(cd $CEAN_ROOT/src/jungerl/$lib
+                  pkg_revision)
+            echo "VSN=$vsn" > $lib/vsn.mk
+        }
+}
+pkg_config() {
+    $MAKE conf
+}
+pkg_make() {
+    for lib in edoc syntax_tools xmerl; (cd lib/$lib; $MAKE)
+    for lib in lib/*; (cd $lib; $MAKE)
+}
+pkg_install() {
+    for lib in edoc syntax_tools xmerl; rm -Rf lib/$lib
+    (cd lib
+     for lib in *
+     do
+       vsn=$(sed 's/.*=//;s/ //g;q' $lib/vsn.mk)
+       rm $lib/vsn.mk
+       mv $lib ${lib}-${vsn}
+       tar zcf $CEAN_ROOT/tmp/${lib}-${vsn}.tgz ${lib}-${vsn}
+     done)
+}

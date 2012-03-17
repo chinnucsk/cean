@@ -142,9 +142,11 @@ _pkg_read_spec() {
     }
     local pub=$pubs[1]
     local instance=$(sed -e '/{instance/!d;s/.* \(.*\)}./\1/' $pub)
+    local master=${pub%/*}
     source ~/.cean/pkg/.default.build
     pkg_deps=()
     [ -z $instance ] || _pkg_read_spec $instance
+    [ -f $master/$master:t.build ] && source $master/$master:t.build
     [ -f ${pub/.pub/.build} ] && source ${pub/.pub/.build}
     pkg_name=$pkg
     pkg_instance=$instance
