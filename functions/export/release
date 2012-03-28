@@ -19,8 +19,8 @@ tar zxf $bootstrap
 for lib in $pkg_name $pkg_deps
 do
     (_pkg_read_spec $lib
-     local dist=$(_pkg_dist)
-     local epkg=$(_pkg_epkg $arch)
+     dist=$(_pkg_dist)
+     epkg=$(_pkg_epkg $arch)
      [ -f $epkg ] && for zip in $(tar tf $epkg); { tar xf $epkg $zip; unzip -oqq $zip -d lib; rm $zip }
      [ -d lib/$dist ] || {
          _error "($pkg_name) no binary epkg available"
