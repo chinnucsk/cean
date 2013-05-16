@@ -167,13 +167,12 @@ _git_rebase_info() {
       elif [ -d .dotest ]; then _git_info[dotest]=.dotest
       else return 1
     fi
-    _git_info[rb_onto]=$(<"$dotest/onto")
-    _git_info[rb_upstream]=$(<"$dotest/upstream")
-    if [ -f "$dotest/orig-head" ]; then _git_info[rb_head]=$(<"$dotest/orig-head")
-      elif [ -f "$dotest/head" ]; then _git_info[rb_head]=$(<"$dotest/head")
+    _git_info[rb_onto]=$(<$_git_info[dotest]/onto)
+    if [ -f $_git_info[dotest]/orig-head ]; then _git_info[rb_head]=$(<$_git_info[dotest]/orig-head)
+      elif [ -f $_git_info[dotest]/head ]; then _git_info[rb_head]=$(<$_git_info[dotest]/head)
       else _git_info[rb_head]=""
     fi
-    _git_info[rb_head_name]=$(<"$dotest/head-name")
+    _git_info[rb_head_name]=$(<$_git_info[dotest]/head-name)
 }
 
 _git_new_empty_branch_from_tgz() {
