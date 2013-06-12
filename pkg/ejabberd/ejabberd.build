@@ -8,12 +8,25 @@ pkg_config() {
     conf=("--prefix=$PWD/$(_pkg_dist)" $(echo $pkg_cfg))
     [ -x /opt/local/bin/port ] && conf+="--with-openssl=/opt/local"
     [ -x /usr/local/bin/brew ] && conf+="--with-openssl="$(brew info openssl | sed -e '/^\//!d;s/ .*//')
-    (cd src
-     [ -x configure ] || autoreconf -vif
-     ./configure $conf)
+    [ -x autogen.sh ] && {
+        # rebar version
+        [ -x configure ] || ./autogen.sh
+        ./configure $conf
+    } || {
+        # old configure version
+        (cd src
+         [ -x configure ] || autoreconf -vif
+         ./configure $conf)
+    }
 }
 pkg_make() {
-    (cd src; $MAKE ejabberd_debug=true) || return $make_error
+    [ -x autogen.sh ] && {
+        # rebar version
+        $MAKE all || return $make_error
+    } || {
+        # old configure version
+        (cd src; $MAKE) || return $make_error
+    }
     env hevea -version >/dev/null 2>/dev/null && {
         (cd doc
          $MAKE distclean
@@ -24,8 +37,15 @@ pkg_make() {
 }
 pkg_install() {
     local dist=$(_pkg_dist)
-    (cd src; $MAKE install) || return $install_error
-    (cd src; $MAKE distclean)
+    [ -x autogen.sh ] && {
+        # rebar version
+        $MAKE install || return $install_error
+        # TODO use $MAKE rel
+    } || {
+        # old configure version
+        (cd src; $MAKE install) || return $install_error
+        (cd src; $MAKE distclean)
+    }
     (cd $dist
      mv ../src .
      mv lib/ejabberd/* . || mv var/lib/ejabberd/* .
