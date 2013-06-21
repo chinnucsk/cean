@@ -10,7 +10,7 @@ pkg_config() {
     [ -x /usr/local/bin/brew ] && conf+="--with-openssl="$(brew info openssl | sed -e '/^\//!d;s/ .*//')
     [ -x autogen.sh ] && {
         # rebar version
-        [ -x configure ] || ./autogen.sh
+        ./autogen.sh
         ./configure $conf
     } || {
         # old configure version

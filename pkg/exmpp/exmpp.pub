@@ -5,5 +5,5 @@
 {keywords, ["jabber","xmpp","library"]}.
 {summary, "Erlang jabber/XMPP library"}.
 {abstract, ""}.
-{home, "http://www.process-one.net/en/ejabberd"}.
-{url, "git://git.process-one.net/exmpp/mainline.git"}.
+{home, "https://github.com/processone/exmpp"}.
+{url, "git://github.com/processone/exmpp.git"}.

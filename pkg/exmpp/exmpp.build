@@ -6,7 +6,8 @@ pkg_init() { : }
 pkg_config() {
     local -a conf
     conf=("--prefix=$PWD/$(_pkg_dist)" $(echo $pkg_cfg))
-    [ -x /opt/local/bin/port ] && conf+=" --with-expat=/opt/local"
+    [ -x /opt/local/bin/port ] && conf+="--with-expat=/opt/local"
+    [ -x /usr/local/bin/brew ] && conf+="--with-expat="$(brew info expat | sed -e '/^\//!d;s/ .*//')
     autoreconf -vif || {
         tar zxf ~/.cean/pkg/exmpp/configure.tar.gz
         sed -e "s/__VERSION__/$pkg_vsn/g" configure > configure.new

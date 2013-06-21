@@ -4,6 +4,6 @@
 {depends, ["crypto","kernel","stdlib"]}.
 {keywords, ["sql"]}.
 {summary, "MySQL native driver"}.
-{abstract, ""}.
-{home, "https://support.process-one.net/doc/display/MESSENGER/Using+ejabberd+with+MySQL+native+driver"}.
-{url, "https://svn.process-one.net/ejabberd-modules/mysql/trunk"}.
+{abstract, "MySQL for ejabberd "}.
+{home, "https://github.com/processone/mysql"}.
+{url, "git://github.com/processone/mysql.git"}.
