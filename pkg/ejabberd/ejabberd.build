@@ -52,7 +52,9 @@ pkg_install() {
      mv sbin/* priv/bin
      mkdir priv/cfg priv/sql
      mv etc/ejabberd/* priv/cfg
-     mv src/odbc/*sql priv/sql
-     mv share/doc/ejabberd doc
+     [ -d src/odbc ] && mv src/odbc/*sql priv/sql
+     [ -d ../sql ] && mv ../sql/* priv/sql
+     [ -d doc ] || mkdir doc
+     mv share/doc/ejabberd/* doc
      rm -Rf lib var db sbin etc share)
 }
