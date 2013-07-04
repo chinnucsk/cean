@@ -6,7 +6,7 @@
 
 _api_check "export/sources package" $* || return $bad_use
 _api_export $* || return $bad_use
-local archive=$(_pkg_tarball)
+local archive=$(_pkg_tarball) spec=$(_pkg_spec)
 
 [ -f $archive ] && {
     _warn "($pkg_name) sources already exported in ${archive/$CEAN_ROOT/}"
@@ -20,7 +20,9 @@ _pkg_cd_sources && {
     # clean tarball
     _cd_workdir
     tar zxf $archive
-    rm */.gitignore
+    (cd $(_pkg_dist)
+     rm .gitignore
+     [ -x $spec:h/prep_sources.sh ] && $spec:h/prep_sources.sh $pkg_name $pkg_vsn $spec)
     tar zcf $archive *
     _rm_workdir
 } || {
